@@ -10,16 +10,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from PIL import Image
-
+st.set_page_config(
+    page_title="반포자이까지 한걸음",
+    page_icon= "chart_with_upwards_trend",
+    layout="wide",
+)
 
 with st.sidebar:
-    choose = option_menu("App Gallery", ["About", "Today\'s Korean Stock", "Today\'s American Stock", "Predict Korean Stock", "Predict American Stock"],
+    choose = option_menu("App Gallery", ["About", "Today\'s Korea Stock Market", "Today\'s US Stock Market", "Predict Korea Stocks", "Predict US Stocks"],
                          icons=['house', 'graph-up-arrow', 'graph-up', 'hurricane','hypnotize'],
                          menu_icon="app-indicator", default_index=0,
                          styles={
-        "container": {"padding": "5!important", "background-color": "#000000"},
+        "container": {"padding": "5!important", "background-color": "#fafafa"},
         "icon": {"color": "orange", "font-size": "25px"}, 
-        "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#000033"},
+        "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#02ab21"},
     }
     )
@@ -28,33 +32,45 @@ logo = Image.open('data/stockcode.jpg')
 
 if choose == "About":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:
+    with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
-        font-size:35px ; font-family: 'Cooper Black'; color: #FF00FF;} 
+        font-size:35px ; font-family: 'Cooper Black'; color: #000000;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Do you want to be a rich?</p>', unsafe_allow_html=True)    
-    with col2:
+        st.title('나와 함께 반포 자이에 살아보지 않겠어요?')    
+    with col2:               # To display brand log
         st.text(' ')
 
-    st.markdown('<p class="font">Hello!\n\n저희는 **반포자이까지 한걸음** 입니다.\n\n저희는 부족한 투자 지식으로 인한 투자손실을 막고자 최적의 포트폴리오를 제공하고, 내일 예상 주가를 예측할 수 있는 사이트입니다.\n\n많이 부족하지만 재미로만 봐주시기를 부탁드립니다.</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font">Hello!\n\n저희는 **반포자이까지 한걸음** 입니다.\n\n저희는 *부족한 투자 지식*으로 인한 *투자손실*을 예방하고자 최적의 **포트폴리오**를 제공하고, 내일 예상 **주가를 예측**할 수 있는 사이트입니다.\n\n많이 부족하지만 **재미로만** 봐주시기를 부탁드립니다.</p>', unsafe_allow_html=True)
 
     image = Image.open('data/stockcode.jpg')
     st.image(image, width=800, caption= 'The Great GATSBY')
 
-elif choose == "Today\'s Korean Stock":
+elif choose == "Today\'s Korea Stock Market":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1: 
+    with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Today\'s Korean Stock!</p>', unsafe_allow_html=True)    
-    with col2:   
+        st.markdown('<p class="font"> Today\'s Korea Stock Market!</p>', unsafe_allow_html=True)    
+    with col2:               # To display brand log
         st.text(' ')
 
     st.title('Local Stocks 📈')
     Stockcode = pd.read_csv('data/Stockcode.csv')
+    name_list = Stockcode['Name'].tolist()
+    name_list.insert(0, '')
+    choice = st.selectbox('검색하실 주식 종목명을 입력해 주세요.',name_list)
+
+
+    for i in range(len(name_list)):
+        if choice == name_list[i]:
+            choice_name = Stockcode.loc[Stockcode['Name'] == name_list[i], 'Name'].values
+            choice_name_to_str =np.array2string(choice_name).strip("[]")
+            Name = choice_name_to_str.strip("''")
+
+
+
     Stockcode.set_index('Name', inplace=True)
-    Name = st.text_input('Code Name',placeholder= '종목명을 입력해 주세요.').upper()
     Code_name_list = Stockcode.index.tolist()
 
     with st.spinner('Wait for it...'):
@@ -96,15 +112,15 @@ elif choose == "Today\'s Korean Stock":
         elif Name not in Code_name_list:
             st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
 
-elif choose == "Today\'s American Stock":
+elif choose == "Today\'s US Stock Market":
    
     col1, col2 = st.columns( [0.8,0.2])
-    with col1: 
+    with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Today\'s American Stock!</p>', unsafe_allow_html=True)    
-    with col2:
+        st.markdown('<p class="font"> Today\'s US Stock Market!</p>', unsafe_allow_html=True)    
+    with col2:               # To display brand log
         st.text(' ')    
 
 
@@ -123,66 +139,79 @@ elif choose == "Today\'s American Stock":
     usdwhere = text.find('<span>미국 <em>USD</em></span></a></th> <td><span>')
     usdletter =  text[usdwhere+48] + text[usdwhere+50:usdwhere+56]
 
-
     Stockcode = pd.read_csv('data/oversea_stockcode.csv')
+    Stockcode['ticker'] = Stockcode['Symbol'].copy()
+        # Name = st.text_input('Code Name', placeholder='미국 주식의 ticker를 입력해주세요.').upper()
+    name_list = Stockcode['Symbol'].tolist()
+    name_list.insert(0, '')
+    choice = st.selectbox('검색하실 미국 주식 종목의 Ticker를 입력해 주세요.',name_list)
+    # with st.spinner('Predicting...'):
+    for i in range(len(name_list)):
+        if choice == name_list[i]:
+            choice_name = Stockcode.loc[Stockcode['Symbol'] == name_list[i], 'Symbol'].values
+            choice_name_to_str =np.array2string(choice_name).strip("[]")
+            Name = choice_name_to_str.strip("''")
+
     Stockcode.set_index('Symbol', inplace=True)
-    Name = st.text_input('Code Name', placeholder='ticker를 입력해주세요.').upper()
     Code_name_list = Stockcode.index.tolist()
-    Stockcode['ticker'] = Stockcode.index
-    with st.spinner('Wait for it...'):
-        if Name in Code_name_list:
-            code_num = Stockcode.at[Name, 'ticker']
-            df = fdr.DataReader(code_num)
-            money = df['Close'].tail(1)
-            k_money = float(money)*float(usdletter)
-            k_money = round(k_money,2)
-            k_money = format(k_money, ',')
+    if Name in Code_name_list:
+        # code_num = Stockcode.at[Name, 'ticker']
+        # data = fdr.DataReader(code_num)   
 
-            col1, col2, col3 = st.columns(3)
-            col1.metric("현재 주식가격",format(df['Close'].tail(1)[0], ',')+'$', "%s원" %k_money)
-            col2.metric("현재 거래량", format(round(df['Volume'].tail(1)[0]), ','),"%.2f%%" %(df['Volume'].pct_change().tail(1)[0] * 100))
-            col3.metric("전일 대비 가격", "%d$" %(df['Close'].diff().tail(1)[0]), "%.2f%%" %(df['Change'].tail(1)[0] * 100))
+        with st.spinner('Wait for it...'):
+            if Name in Code_name_list:
+                code_num = Stockcode.at[Name, 'ticker']
+                df = fdr.DataReader(code_num)
+                money = df['Close'].tail(1)
+                k_money = float(money)*float(usdletter)
+                k_money = round(k_money,2)
+                k_money = format(k_money, ',')
 
-            fig = px.line(df, y='Close', title='{} 종가 Time Series'.format(Name))
+                col1, col2, col3 = st.columns(3)
+                col1.metric("현재 주식가격",format(df['Close'].tail(1)[0], ',')+'$', "%s원" %k_money)
+                col2.metric("현재 거래량", format(round(df['Volume'].tail(1)[0]), ','),"%.2f%%" %(df['Volume'].pct_change().tail(1)[0] * 100))
+                col3.metric("전일 대비 가격", "%d$" %(df['Close'].diff().tail(1)[0]), "%.2f%%" %(df['Change'].tail(1)[0] * 100))
 
-            fig.update_xaxes(
-                rangeslider_visible=True,
-                rangeselector=dict(
-                    buttons=list([
-                        dict(count=1, label="1m", step="month", stepmode="backward"),
-                        dict(count=3, label="3m", step="month", stepmode="backward"),
-                        dict(count=6, label="6m", step="month", stepmode="backward"),
-                        dict(step="all")
-                    ])
+                fig = px.line(df, y='Close', title='{} 종가 Time Series'.format(Name))
+
+                fig.update_xaxes(
+                    rangeslider_visible=True,
+                    rangeselector=dict(
+                        buttons=list([
+                            dict(count=1, label="1m", step="month", stepmode="backward"),
+                            dict(count=3, label="3m", step="month", stepmode="backward"),
+                            dict(count=6, label="6m", step="month", stepmode="backward"),
+                            dict(step="all")
+                        ])
+                    )
                 )
-            )
-            st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True)
 
-            fig2 = go.Figure(data=[go.Candlestick(x=df.index,
-                        open=df['Open'],
-                        high=df['High'],
-                        low=df['Low'],
-                        close=df['Close'],
-                        increasing_line_color = 'tomato',
-                        decreasing_line_color = 'royalblue',
-                        showlegend = False)])
+                fig2 = go.Figure(data=[go.Candlestick(x=df.index,
+                            open=df['Open'],
+                            high=df['High'],
+                            low=df['Low'],
+                            close=df['Close'],
+                            increasing_line_color = 'tomato',
+                            decreasing_line_color = 'royalblue',
+                            showlegend = False)])
 
-            fig2.update_layout(title='{} Candlestick chart'.format(Name))
-            st.plotly_chart(fig2, use_container_width=True)
+                fig2.update_layout(title='{} Candlestick chart'.format(Name))
+                st.plotly_chart(fig2, use_container_width=True)
 
-            st.text(prin +'의 KEB하나은행 환율정보 입니다.')
-            st.text('현재 1$당 '+str(usdletter)+'원 입니다.')
-        elif Name not in Code_name_list:
-            st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
+                st.text(prin +'의 KEB하나은행 환율정보 입니다.')
+                st.text('현재 1$당 '+str(usdletter)+'원 입니다.')
+            elif Name not in Code_name_list:
+                st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
 
-elif choose == "Predict Korean Stock":
+elif choose == "Predict Korea Stocks":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:
+    with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Predict Tomrorow\'s Korean Stock!</p>', unsafe_allow_html=True)    
-    with col2:
+        st.markdown('<p class="font"> Predict Tomrorow\'s Korea Stocks!</p>', unsafe_allow_html=True)    
+    with col2:               # To display brand log
         st.text(' ')
 
 
@@ -192,8 +221,8 @@ elif choose == "Predict Korean Stock":
     Stockcode = pd.read_csv('data/Stockcode.csv')
 
     name_list = Stockcode['Name'].tolist()
-    name_list.insert(0, '<종목명을 입력해 주세요.>')
-    choice = st.selectbox('Search',name_list)
+    name_list.insert(0, '')
+    choice = st.selectbox('검색하실 주식 종목명을 입력해 주세요.',name_list)
 
 
     for i in range(len(name_list)):
@@ -256,8 +285,8 @@ elif choose == "Predict Korean Stock":
                     st.markdown(f'위의 주식 상황을 바탕으로 앞으로 5일동안 **{Name}** 주식은 평균 **{future}%** 하락할 것으로 보입니다.')
 
                 pred = preds[0]
-                predict = data['Close'].tail(1).values * pred
-                yesterday_close = data['Close'].tail(1).values
+                predict = data['Close'].tail(1).values * pred #8월 17일꺼에 떨어질 확률 곱하면 0.1이면 1000원 일 때 100원으로 계산 됨. -0.1이면 -100으로 계산 됨
+                yesterday_close = data['Close'].tail(1).values #8월 17일꺼
 
 
                 if pred > 0:
@@ -283,14 +312,14 @@ elif choose == "Predict Korean Stock":
     elif Name not in Code_name_list:
         st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
 
-elif choose == "Predict American Stock":
+elif choose == "Predict US Stocks":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1: 
+    with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Predict Tomrorow\'s American Stock!</p>', unsafe_allow_html=True)    
-    with col2:
+        st.markdown('<p class="font"> Predict Tomrorow\'s US Stocks!</p>', unsafe_allow_html=True)    
+    with col2:               # To display brand log
         st.text(' ')
 
     st.title('해외주식 종목의 주가를 예측해 보세요 📈')
@@ -311,10 +340,9 @@ elif choose == "Predict American Stock":
 
     Stockcode = pd.read_csv('data/oversea_stockcode.csv')
     Stockcode['ticker'] = Stockcode['Symbol'].copy()
-        # Name = st.text_input('Code Name', placeholder='미국 주식의 ticker를 입력해주세요.').upper()
     name_list = Stockcode['Symbol'].tolist()
-    name_list.insert(0, '<검색하실 종목의 Ticker를 입력해주세요.>')
-    choice = st.selectbox('Search',name_list)
+    name_list.insert(0, '')
+    choice = st.selectbox('검색하실 미국 주식 종목의 Ticker를 입력해 주세요.',name_list)
 
     with st.spinner('Predicting...'):
         for i in range(len(name_list)):
