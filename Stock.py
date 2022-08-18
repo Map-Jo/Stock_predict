@@ -311,24 +311,24 @@ elif choose == "Predict American Stock":
 
     Stockcode = pd.read_csv('data/oversea_stockcode.csv')
     Stockcode['ticker'] = Stockcode['Symbol'].copy()
-    # Name = st.text_input('Code Name', placeholder='미국 주식의 ticker를 입력해주세요.').upper()
+        # Name = st.text_input('Code Name', placeholder='미국 주식의 ticker를 입력해주세요.').upper()
     name_list = Stockcode['Symbol'].tolist()
     name_list.insert(0, '<검색하실 종목의 Ticker를 입력해주세요.>')
     choice = st.selectbox('Search',name_list)
 
+    with st.spinner('Predicting...'):
+        for i in range(len(name_list)):
+            if choice == name_list[i]:
+                choice_name = Stockcode.loc[Stockcode['Symbol'] == name_list[i], 'Symbol'].values
+                choice_name_to_str =np.array2string(choice_name).strip("[]")
+                Name = choice_name_to_str.strip("''")
 
-    for i in range(len(name_list)):
-        if choice == name_list[i]:
-            choice_name = Stockcode.loc[Stockcode['Symbol'] == name_list[i], 'Symbol'].values
-            choice_name_to_str =np.array2string(choice_name).strip("[]")
-            Name = choice_name_to_str.strip("''")
-
-    Stockcode.set_index('Symbol', inplace=True)
-    Code_name_list = Stockcode.index.tolist()
-    if Name in Code_name_list:
-        code_num = Stockcode.at[Name, 'ticker']
-        data = fdr.DataReader(code_num)
-        with st.spinner('Predicting...'):
+        Stockcode.set_index('Symbol', inplace=True)
+        Code_name_list = Stockcode.index.tolist()
+        if Name in Code_name_list:
+            code_num = Stockcode.at[Name, 'ticker']
+            data = fdr.DataReader(code_num)
+        
             if data.shape[0] >= 60:
                 startdate = (datetime.datetime.now()-datetime.timedelta(days=31)).strftime('%Y-%m-%d')
                 enddate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -399,7 +399,7 @@ elif choose == "Predict American Stock":
                     st.markdown(f'내일 **{Name}** 주식은 **{round(pred*100,2)} %** 하락할 예정이고, 주가는 **{minus_money}$ ({k_minus_money}원)**으로 예상됩니다.')
                 else:
                     st.markdown(f'내일 **{Name} 주식은 변동이 없을 것으로 예상됩니다.')
-            
+                
                 st.text(prin +'의 KEB하나은행 환율정보 입니다.')
                 st.text('현재 1$당 '+str(usdletter)+'원 입니다.')
 
@@ -414,5 +414,5 @@ elif choose == "Predict American Stock":
 
             st.success('Done!')
 
-    elif Name not in Code_name_list:
-        st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
+        elif Name not in Code_name_list:
+            st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
