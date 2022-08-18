@@ -1,4 +1,4 @@
-streamlit_option_menu
+
 pandas
 streamlit
 finance-dataReader
@@ -7,3 +7,6 @@ plotly
 urllib3
 datetime
 bs4
+numpy
+pykrx
+koreanize_matplotlib
