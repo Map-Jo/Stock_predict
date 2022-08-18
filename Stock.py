@@ -30,7 +30,7 @@ if choose == "About":
     col1, col2 = st.columns( [0.8,0.2])
     with col1:               # To display the header text using css style
         st.markdown(""" <style> .font {
-        font-size:35px ; font-family: 'Cooper Black'; color: #330000;} 
+        font-size:35px ; font-family: 'Cooper Black'; color: #FF00FF;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Do you want to be a rich?</p>', unsafe_allow_html=True)    
     with col2:               # To display brand log
