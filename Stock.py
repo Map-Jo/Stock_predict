@@ -28,12 +28,12 @@ logo = Image.open('data/stockcode.jpg')
 
 if choose == "About":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1:
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF00FF;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Do you want to be a rich?</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:
         st.text(' ')
 
     st.markdown('<p class="font">Hello!\n\n저희는 **반포자이까지 한걸음** 입니다.\n\n저희는 부족한 투자 지식으로 인한 투자손실을 막고자 최적의 포트폴리오를 제공하고, 내일 예상 주가를 예측할 수 있는 사이트입니다.\n\n많이 부족하지만 재미로만 봐주시기를 부탁드립니다.</p>', unsafe_allow_html=True)
@@ -43,12 +43,12 @@ if choose == "About":
 
 elif choose == "Today\'s Korean Stock":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1: 
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Today\'s Korean Stock!</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:   
         st.text(' ')
 
     st.title('Local Stocks 📈')
@@ -99,12 +99,12 @@ elif choose == "Today\'s Korean Stock":
 elif choose == "Today\'s American Stock":
    
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1: 
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Today\'s American Stock!</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:
         st.text(' ')    
 
 
@@ -173,16 +173,16 @@ elif choose == "Today\'s American Stock":
             st.text(prin +'의 KEB하나은행 환율정보 입니다.')
             st.text('현재 1$당 '+str(usdletter)+'원 입니다.')
         elif Name not in Code_name_list:
-            st.text('검색하신일거 같아 주식 종목이 없습니다. 정확하게 입력해주세요.')
+            st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
 
 elif choose == "Predict Korean Stock":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1:
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Predict Tomrorow\'s Korean Stock!</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:
         st.text(' ')
 
 
@@ -256,8 +256,8 @@ elif choose == "Predict Korean Stock":
                     st.markdown(f'위의 주식 상황을 바탕으로 앞으로 5일동안 **{Name}** 주식은 평균 **{future}%** 하락할 것으로 보입니다.')
 
                 pred = preds[0]
-                predict = data['Close'].tail(1).values * pred #8월 17일꺼에 떨어질 확률 곱하면 0.1이면 1000원 일 때 100원으로 계산 됨. -0.1이면 -100으로 계산 됨
-                yesterday_close = data['Close'].tail(1).values #8월 17일꺼
+                predict = data['Close'].tail(1).values * pred
+                yesterday_close = data['Close'].tail(1).values
 
 
                 if pred > 0:
@@ -285,12 +285,12 @@ elif choose == "Predict Korean Stock":
 
 elif choose == "Predict American Stock":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1: 
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Predict Tomrorow\'s American Stock!</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:
         st.text(' ')
 
     st.title('해외주식 종목의 주가를 예측해 보세요 📈')
