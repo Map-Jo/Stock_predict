@@ -21,8 +21,8 @@ st.set_page_config(
 )
 
 with st.sidebar:
-    choose = option_menu("App Gallery", ["About", "Today\'s Korea Stock Market", "Today\'s US Stock Market", "Predict Korea Stocks", "Predict US Stocks", 'Caution', 'Portfolio'],
-                         icons=['house', 'graph-up-arrow', 'graph-up', 'hurricane','hypnotize', 'exclamation-diamond-fill', 'clipboard-data-fill'],
+    choose = option_menu("App Gallery", ["About", 'Portfolio' ,"Today\'s Korea Stock Market", "Today\'s US Stock Market", "Predict Korea Stocks", "Predict US Stocks", 'Caution'],
+                         icons=['house','clipboard-data-fill', 'graph-up-arrow', 'graph-up', 'hurricane','hypnotize', 'exclamation-diamond-fill'],
                          menu_icon="app-indicator", default_index=0,
                          styles={
         "container": {"padding": "5!important", "background-color": "#fafafa"},
