@@ -451,7 +451,6 @@ elif choose == "Predict US Stocks":
             st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
             
 elif choose == 'Portfolio':
-    import requests
     st.markdown("# Portfolio for Risk Averse")
     st.markdown("## 무위험이자율")
     st.markdown("* CD 91물 16년 1월 ~ 22년 연평균 수익률")
@@ -517,7 +516,7 @@ elif choose == 'Portfolio':
 
             # 52주 베타 추출 함수
             def get_beta(code):
-                response = requests.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=")
+                response = requests.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=",headers={'User-Agent': 'Mozilla/5.0'})
                 html = bs(response.text, "lxml")
                 tmp = html.select("#cTB11 > tbody > tr:nth-child(6) > td")
 
