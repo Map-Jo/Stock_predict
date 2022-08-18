@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup as bs
 from pykrx import stock
 from PIL import Image
 import koreanize_matplotlib
-import requests
+
 
 st.set_page_config(
     page_title="반포자이까지 한걸음",
