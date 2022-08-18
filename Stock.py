@@ -451,6 +451,7 @@ elif choose == "Predict US Stocks":
             st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
             
 elif choose == 'Portfolio':
+    import requests
     st.markdown("# Portfolio for Risk Averse")
     st.markdown("## 무위험이자율")
     st.markdown("* CD 91물 16년 1월 ~ 22년 연평균 수익률")
