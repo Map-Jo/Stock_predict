@@ -3,7 +3,7 @@ import streamlit as st
 import FinanceDataReader as fdr
 import plotly.graph_objects as go
 import plotly.express as px
-import urllib.request
+import urllib.request as ur
 from streamlit_option_menu import option_menu
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup as bs
 from pykrx import stock
 from PIL import Image
 import koreanize_matplotlib
-
+import requests as rq
 
 st.set_page_config(
     page_title="반포자이까지 한걸음",
@@ -133,7 +133,7 @@ elif choose == "Today\'s US Stock Market":
     st.title('Overseas Stocks 📈')
 
 
-    page = urllib.request.urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8")
+    page = ur.urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8")
     text = page.read().decode("utf8")
 
     where = text.find('class="grp_info"> <em>')
@@ -331,7 +331,7 @@ elif choose == "Predict US Stocks":
 
 
 
-    page = urllib.request.urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8")
+    page = ur.urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8")
     text = page.read().decode("utf8")
 
     where = text.find('class="grp_info"> <em>')
@@ -516,7 +516,7 @@ elif choose == 'Portfolio':
 
             # 52주 베타 추출 함수
             def get_beta(code):
-                response = requests.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=",headers={'User-Agent': 'Mozilla/5.0'})
+                response = rq.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=")
                 html = bs(response.text, "lxml")
                 tmp = html.select("#cTB11 > tbody > tr:nth-child(6) > td")
 
