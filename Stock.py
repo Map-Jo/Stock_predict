@@ -3,7 +3,7 @@ import streamlit as st
 import FinanceDataReader as fdr
 import plotly.graph_objects as go
 import plotly.express as px
-import urllib.request
+from urllib.request import Request, urlopen
 from streamlit_option_menu import option_menu
 import numpy as np
 import matplotlib.pyplot as plt
