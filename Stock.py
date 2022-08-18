@@ -3,7 +3,6 @@ import streamlit as st
 import FinanceDataReader as fdr
 import plotly.graph_objects as go
 import plotly.express as px
-import FinanceDataReader as fdr
 import urllib.request
 from streamlit_option_menu import option_menu
 import numpy as np
@@ -469,7 +468,7 @@ elif choose == 'Portfolio':
     st.markdown("* x표시를 기준으로 투자자의 성향에 따라 가중치를 조정해서 확인하시면 됩니다.")
     st.markdown("* 해당 지표는 세금, 거래 수수료 등이 반영되지 않은 수치이므로 참고용으로 사용하시길 바랍니다.")
 
-    df_krx = pd.read_csv('data/Stockcode.csv')
+    df_krx = fdr.StockListing("KRX")
     df_krx = df_krx.dropna(axis=0).reset_index(drop=True)
 
     name_list = df_krx['Name'].tolist()
@@ -724,6 +723,7 @@ elif choose == 'Portfolio':
                 st.write(f"{item_info[0]}의 연간 기대수익률: {input_item[0]}%")
                 st.write(f"{item_info[0]}의 보유 비중: {np.round(mvp_weight, 2)}")
                 st.write(f"{top5_name}의 보유 비중: {np.round(1 - mvp_weight, 2)}")
+
 elif choose == 'Caution':
     st.markdown('### 증권투자시 유의사항')
     st.markdown('* 증권투자는 본인의 판단과 책임으로.')
