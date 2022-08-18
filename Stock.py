@@ -9,11 +9,13 @@ from streamlit_option_menu import option_menu
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import timedelta
-from datetime import datetime
+import datetime
 from bs4 import BeautifulSoup as bs
 from pykrx import stock
 from PIL import Image
 import koreanize_matplotlib
+import requests
+
 st.set_page_config(
     page_title="반포자이까지 한걸음",
     page_icon= "chart_with_upwards_trend",
@@ -22,7 +24,7 @@ st.set_page_config(
 
 with st.sidebar:
     choose = option_menu("App Gallery", ["About", 'Portfolio' ,"Today\'s Korea Stock Market", "Today\'s US Stock Market", "Predict Korea Stocks", "Predict US Stocks", 'Caution'],
-                         icons=['house','clipboard-data-fill', 'graph-up-arrow', 'graph-up', 'hurricane','hypnotize', 'exclamation-diamond-fill'],
+                         icons=['house','diagram-3-fill', 'graph-up-arrow', 'graph-up', 'hurricane','hypnotize', 'exclamation-diamond-fill'],
                          menu_icon="app-indicator", default_index=0,
                          styles={
         "container": {"padding": "5!important", "background-color": "#fafafa"},
