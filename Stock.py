@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup as bs
 from pykrx import stock
 from PIL import Image
 import koreanize_matplotlib
-
+from urllib.request import Request, urlopen
 
 st.set_page_config(
     page_title="반포자이까지 한걸음",
@@ -516,7 +516,8 @@ elif choose == 'Portfolio':
 
             # 52주 베타 추출 함수
             def get_beta(code):
-                response = urllib.request.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=")
+                response = Request(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=", headers={'User-Agent': 'Mozilla/5.0'})
+                response = urlopen(req).read()
                 html = bs(response.text, "lxml")
                 tmp = html.select("#cTB11 > tbody > tr:nth-child(6) > td")
 
