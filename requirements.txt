@@ -1,4 +1,3 @@
-
 pandas
 streamlit
 finance-dataReader
@@ -10,3 +9,4 @@ bs4
 numpy
 pykrx
 koreanize_matplotlib
+streamlit_option_menu
