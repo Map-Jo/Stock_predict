@@ -6,3 +6,4 @@ matplotlib
 plotly
 urllib3
 datetime
+bs4
