@@ -201,8 +201,8 @@ elif choose == "Today\'s US Stock Market":
 
                 st.text(prin +'의 KEB하나은행 환율정보 입니다.')
                 st.text('현재 1$당 '+str(usdletter)+'원 입니다.')
-            elif Name not in Code_name_list:
-                st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
+    elif Name not in Code_name_list:
+        st.text('검색하신 주식 종목이 없습니다. 정확하게 입력해주세요.')
 
 elif choose == "Predict Korea Stocks":
     col1, col2 = st.columns( [0.8,0.2])
