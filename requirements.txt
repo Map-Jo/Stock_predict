@@ -1,0 +1,7 @@
+pandas
+streamlit
+finance-dataReader
+matplotlib
+plotly
+urllib3
+datetime
