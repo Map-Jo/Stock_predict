@@ -10,3 +10,4 @@ numpy
 pykrx
 koreanize_matplotlib
 streamlit_option_menu
+json
