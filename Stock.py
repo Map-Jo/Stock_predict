@@ -8,12 +8,13 @@ from streamlit_option_menu import option_menu
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import timedelta
-import datetime
+from datetime import datetime
+import datetime as dt
 from bs4 import BeautifulSoup as bs
 from pykrx import stock
 from PIL import Image
 import koreanize_matplotlib
-from urllib.request import Request, urlopen
+import requests
 
 st.set_page_config(
     page_title="반포자이까지 한걸음",
@@ -60,7 +61,7 @@ elif choose == "Today\'s Korea Stock Market":
     with col2:               # To display brand log
         st.text(' ')
 
-    st.title('Local Stocks 📈')
+    st.title('Korea Stocks 📈')
     Stockcode = pd.read_csv('data/Stockcode.csv')
     name_list = Stockcode['Name'].tolist()
     name_list.insert(0, '')
@@ -130,7 +131,7 @@ elif choose == "Today\'s US Stock Market":
 
 
 
-    st.title('Overseas Stocks 📈')
+    st.title('US Stocks 📈')
 
 
     page = urllib.request.urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8")
@@ -215,7 +216,7 @@ elif choose == "Predict Korea Stocks":
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Predict Tomrorow\'s Korea Stocks!</p>', unsafe_allow_html=True)    
+        st.markdown('<p class="font"> Predict Tomorrow\'s Korea Stocks!</p>', unsafe_allow_html=True)    
     with col2:               # To display brand log
         st.text(' ')
 
@@ -245,8 +246,8 @@ elif choose == "Predict Korea Stocks":
         data = fdr.DataReader(code_num)
         with st.spinner('Predicting...'):
             if data.shape[0] >= 60:
-                startdate = (datetime.datetime.now()-datetime.timedelta(days=31)).strftime('%Y-%m-%d')
-                enddate = datetime.datetime.now().strftime('%Y-%m-%d')
+                startdate = (dt.datetime.now()-dt.timedelta(days=31)).strftime('%Y-%m-%d')
+                enddate = dt.datetime.now().strftime('%Y-%m-%d')
                 data_ = data.loc[startdate:enddate]
                 close = data_['Close']
                 base = (close - close.min()) / (close.max() - close.min())
@@ -323,7 +324,7 @@ elif choose == "Predict US Stocks":
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
-        st.markdown('<p class="font"> Predict Tomrorow\'s US Stocks!</p>', unsafe_allow_html=True)    
+        st.markdown('<p class="font"> Predict Tomorrow\'s US Stocks!</p>', unsafe_allow_html=True)    
     with col2:               # To display brand log
         st.text(' ')
 
@@ -363,8 +364,8 @@ elif choose == "Predict US Stocks":
             data = fdr.DataReader(code_num)
         
             if data.shape[0] >= 60:
-                startdate = (datetime.datetime.now()-datetime.timedelta(days=31)).strftime('%Y-%m-%d')
-                enddate = datetime.datetime.now().strftime('%Y-%m-%d')
+                startdate = (dt.datetime.now()-dt.timedelta(days=31)).strftime('%Y-%m-%d')
+                enddate = dt.datetime.now().strftime('%Y-%m-%d')
                 data_ = data.loc[startdate:enddate]
                 close = data_['Close']
                 base = (close - close.min()) / (close.max() - close.min())
@@ -468,7 +469,7 @@ elif choose == 'Portfolio':
     st.markdown("* x표시를 기준으로 투자자의 성향에 따라 가중치를 조정해서 확인하시면 됩니다.")
     st.markdown("* 해당 지표는 세금, 거래 수수료 등이 반영되지 않은 수치이므로 참고용으로 사용하시길 바랍니다.")
 
-    df_krx = fdr.StockListing("KRX")
+    df_krx = pd.read_csv('data/Stockcode.csv')
     df_krx = df_krx.dropna(axis=0).reset_index(drop=True)
 
     name_list = df_krx['Name'].tolist()
@@ -516,8 +517,7 @@ elif choose == 'Portfolio':
 
             # 52주 베타 추출 함수
             def get_beta(code):
-                response = Request(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=", headers={'User-Agent': 'Mozilla/5.0'})
-                response = urlopen(req).read()
+                response = requests.get(f"https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd={code}&cn=", headers={'User-Agent': 'Mozilla/5.0'})
                 html = bs(response.text, "lxml")
                 tmp = html.select("#cTB11 > tbody > tr:nth-child(6) > td")
 
