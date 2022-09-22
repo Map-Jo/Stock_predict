@@ -82,7 +82,7 @@ elif choose == "Today\'s Korea Stock Market":
 
     with st.spinner('Wait for it...'):
         if Name in Code_name_list:
-            code_num = Stockcode.at[name, 'code']
+            code_num = Stockcode.at[Name, 'code']
             df = pdr.get_data_yahoo(code_num)
             df['Change'] = df['Close'].tail(2)[0] - df['Close'].tail(2)[1]
             col1, col2, col3 = st.columns(3)
