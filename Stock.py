@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import streamlit as st
-import FinanceDataReader as fdr
+import pandas_datareader as pdr
 import plotly.graph_objects as go
 import plotly.express as px
 import urllib.request
@@ -48,42 +48,43 @@ if choose == "About":
         st.text(' ')
 
     st.markdown('<p class="font">Hello!\n\n저희는 **반포자이까지 한걸음** 입니다.\n\n저희는 *부족한 투자 지식*으로 인한 *투자손실*을 예방하고자 최적의 **포트폴리오**를 제공하고, 내일 예상 **주가를 예측**할 수 있는 사이트입니다.\n\n많이 부족하지만 **재미로만** 봐주시기를 부탁드립니다.</p>', unsafe_allow_html=True)
-#     st.markdown('[유의사항]('https://map-jo-stock-predict-stock-73rqcb.streamlitapp.com/#https://map-jo-stock-predict-stock-73rqcb.streamlitapp.com/Caution')
+
     image = Image.open('data/stockcode.jpg')
     st.image(image, width=800, caption= 'The Great GATSBY')
 
 elif choose == "Today\'s Korea Stock Market":
     col1, col2 = st.columns( [0.8,0.2])
-    with col1:               # To display the header text using css style
+    with col1:              
         st.markdown(""" <style> .font {
         font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
         </style> """, unsafe_allow_html=True)
         st.markdown('<p class="font"> Today\'s Korea Stock Market!</p>', unsafe_allow_html=True)    
-    with col2:               # To display brand log
+    with col2:
         st.text(' ')
 
     st.title('Korea Stocks 📈')
-    Stockcode = pd.read_csv('data/Stockcode.csv')
-    name_list = Stockcode['Name'].tolist()
+    Stockcode = pd.read_csv('data/stockcode_pdr.csv')
+    name_list = Stockcode['name'].tolist()
     name_list.insert(0, '')
     choice = st.selectbox('검색하실 주식 종목명을 입력해 주세요.',name_list)
 
 
     for i in range(len(name_list)):
         if choice == name_list[i]:
-            choice_name = Stockcode.loc[Stockcode['Name'] == name_list[i], 'Name'].values
+            choice_name = Stockcode.loc[Stockcode['name'] == name_list[i], 'name'].values
             choice_name_to_str =np.array2string(choice_name).strip("[]")
             Name = choice_name_to_str.strip("''")
 
 
 
-    Stockcode.set_index('Name', inplace=True)
+    Stockcode.set_index('name', inplace=True)
     Code_name_list = Stockcode.index.tolist()
 
     with st.spinner('Wait for it...'):
         if Name in Code_name_list:
-            code_num = Stockcode.at[Name, 'Symbol']
-            df = fdr.DataReader(code_num)
+            code_num = Stockcode.at[name, 'code']
+            df = pdr.get_data_yahoo(code_num)
+            df['Change'] = df['Close'].tail(2)[0] - df['Close'].tail(2)[1]
             col1, col2, col3 = st.columns(3)
             col1.metric("현재 주식가격",format(df['Close'].tail(1)[0], ',')+'원', "%d원" %(df['Close'].diff().tail(1)[0]))
             col2.metric("현재 거래량", format(df['Volume'].tail(1)[0], ','),"%.2f%%" %(df['Volume'].pct_change().tail(1)[0] * 100))
