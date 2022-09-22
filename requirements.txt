@@ -1,6 +1,6 @@
 pandas
 streamlit
-finance-dataReader
+pandas_datareader
 matplotlib
 plotly
 urllib3
